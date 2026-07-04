@@ -1,0 +1,17 @@
+/**
+ * 移動しやすいまち西鎌倉 投稿ボード - 設定
+ *
+ * 事務局メールやシート名など、運用時に変わる値をまとめます。
+ */
+
+const CONFIG = {
+  gasOwnerAccount: 'kazutoshi_ishikawa@nishikamakura-jichikai.com',
+  defaultAdminEmail: 'kazutoshi_ishikawa@nishikamakura-jichikai.com',
+  spreadsheetIdProperty: 'MOBILITY_NEEDS_SPREADSHEET_ID',
+  adminEmailProperty: 'MOBILITY_NEEDS_ADMIN_EMAIL',
+  sheetName: '投稿',
+  publicStatus: '公開',
+  pendingStatus: '承認待ち',
+  privateStatus: '非公開',
+  maxPublicItems: 80
+};
