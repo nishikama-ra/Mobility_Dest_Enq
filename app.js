@@ -1,4 +1,4 @@
-const GAS_WEB_APP_URL = "";
+const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXtXdR2JwA0Ti4ELfGDjOSx9aK4i72F0JuZ3ZmiZlE8ZPwWJmSl90KmipD-2OZObKy/exec";
 const needsForm = document.querySelector("#needsForm");
 const manageLinkForm = document.querySelector("#manageLinkForm");
 const formMessage = document.querySelector("#formMessage");
