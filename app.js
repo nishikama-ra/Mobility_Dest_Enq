@@ -34,36 +34,84 @@ function buildTitle(item) {
   return `${area}の${purpose}`;
 }
 
-function callJsonp(params, onSuccess, onError) {
+function buildApiUrl(params) {
+  const url = new URL(GAS_WEB_APP_URL);
+  Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+  return url;
+}
+
+function callApi(params, onSuccess, onError) {
   if (!isConfigured()) {
     onError?.("GASのWebアプリURLを設定すると利用できます。");
     return;
   }
 
+  const url = buildApiUrl(params);
+  if (window.fetch) {
+    const controller = window.AbortController ? new AbortController() : null;
+    const timeoutId = window.setTimeout(() => controller?.abort(), 6000);
+    fetch(url.toString(), {
+      cache: "no-store",
+      redirect: "follow",
+      signal: controller?.signal
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((payload) => {
+        window.clearTimeout(timeoutId);
+        handleApiPayload(payload, onSuccess, onError);
+      })
+      .catch(() => {
+        window.clearTimeout(timeoutId);
+        callJsonp(url, onSuccess, onError);
+      });
+    return;
+  }
+
+  callJsonp(url, onSuccess, onError);
+}
+
+function handleApiPayload(payload, onSuccess, onError) {
+  if (payload && payload.ok === false) {
+    onError?.(payload.error || "処理に失敗しました。");
+    return;
+  }
+  onSuccess(payload);
+}
+
+function callJsonp(url, onSuccess, onError) {
   const callbackName = `mobilityNeedsCallback_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
   const script = document.createElement("script");
-  const url = new URL(GAS_WEB_APP_URL);
-  Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-  url.searchParams.set("callback", callbackName);
+  const timeoutId = window.setTimeout(() => {
+    cleanupJsonp(callbackName, script);
+    onError?.("通信に失敗しました。ページを再読み込みしてもう一度お試しください。");
+  }, 12000);
 
   window[callbackName] = (payload) => {
-    delete window[callbackName];
-    script.remove();
-    if (payload && payload.ok === false) {
-      onError?.(payload.error || "処理に失敗しました。");
-      return;
-    }
-    onSuccess(payload);
+    window.clearTimeout(timeoutId);
+    cleanupJsonp(callbackName, script);
+    handleApiPayload(payload, onSuccess, onError);
   };
 
   script.onerror = () => {
-    delete window[callbackName];
-    script.remove();
-    onError?.("通信に失敗しました。時間をおいてもう一度お試しください。");
+    window.clearTimeout(timeoutId);
+    cleanupJsonp(callbackName, script);
+    onError?.("通信に失敗しました。ページを再読み込みしてもう一度お試しください。");
   };
 
+  url.searchParams.set("callback", callbackName);
+  url.searchParams.set("_", Date.now().toString());
   script.src = url.toString();
   document.body.appendChild(script);
+}
+
+function cleanupJsonp(callbackName, script) {
+  delete window[callbackName];
+  script.remove();
 }
 
 function renderNeeds(payload) {
@@ -96,7 +144,7 @@ function renderNeeds(payload) {
 }
 
 function loadPublicNeeds() {
-  callJsonp(
+  callApi(
     { action: "list" },
     renderNeeds,
     (message) => {
@@ -179,7 +227,7 @@ function renderMyPosts(payload) {
 
 function loadMyPosts() {
   if (!manageEmail || !manageToken) return;
-  callJsonp(
+  callApi(
     { action: "myPosts", email: manageEmail, manageToken },
     renderMyPosts,
     (message) => {
