@@ -43,14 +43,14 @@ function setupMobilityNeedsBoard() {
   const existingId = PropertiesService.getScriptProperties().getProperty(CONFIG.spreadsheetIdProperty);
   if (existingId) {
     const existingSpreadsheet = SpreadsheetApp.openById(existingId);
-    prepareSheet_(existingSpreadsheet);
+    prepareSubmissionSheets_(existingSpreadsheet);
     prepareTokenSheet_(existingSpreadsheet);
     return buildSetupResult_(existingId, false);
   }
 
   const spreadsheet = SpreadsheetApp.create('移動しやすいまち西鎌倉 投稿ボード');
   PropertiesService.getScriptProperties().setProperty(CONFIG.spreadsheetIdProperty, spreadsheet.getId());
-  prepareSheet_(spreadsheet);
+  prepareSubmissionSheets_(spreadsheet);
   prepareTokenSheet_(spreadsheet);
   return buildSetupResult_(spreadsheet.getId(), true);
 }
@@ -61,7 +61,7 @@ function connectSpreadsheet(spreadsheetId) {
   }
   const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
   PropertiesService.getScriptProperties().setProperty(CONFIG.spreadsheetIdProperty, spreadsheet.getId());
-  prepareSheet_(spreadsheet);
+  prepareSubmissionSheets_(spreadsheet);
   prepareTokenSheet_(spreadsheet);
   return buildSetupResult_(spreadsheet.getId(), false);
 }
@@ -117,7 +117,7 @@ function doPost(e) {
     }
 
     const row = normalizePost_(params);
-    const sheet = getSheet_();
+    const sheet = getSubmissionSheetByVisibility_(row[6]);
     sheet.appendRow(row);
     SpreadsheetApp.flush();
     const manageLink = createManageLink_(row[8], cleanText_(params.pageUrl));
@@ -142,7 +142,7 @@ function requestManageLink_(params) {
 }
 
 function getPublicNeeds_() {
-  const sheet = getSheet_();
+  const sheet = getPublicSubmissionSheet_();
   const values = sheet.getDataRange().getValues();
   if (values.length <= 1) {
     return [];
@@ -166,21 +166,31 @@ function getPublicNeeds_() {
 function getMyPosts_(email, token) {
   const normalizedEmail = normalizeEmail_(email);
   validateManageToken_(normalizedEmail, token);
-  const sheet = getSheet_();
-  const values = sheet.getDataRange().getValues();
-  if (values.length <= 1) {
-    return [];
-  }
+  const items = [];
+  getAllSubmissionSheets_().forEach(function(sheet) {
+    const values = sheet.getDataRange().getValues();
+    if (values.length <= 1) {
+      return;
+    }
 
-  const index = buildHeaderIndex_(values[0]);
-  return values.slice(1)
-    .filter(function(row) {
-      return normalizeEmail_(row[index['メールアドレス']]) === normalizedEmail;
+    const index = buildHeaderIndex_(values[0]);
+    values.slice(1).forEach(function(row) {
+      const normalizedRow = normalizeRowLength_(row, HEADERS.length);
+      if (normalizeEmail_(normalizedRow[index['メールアドレス']]) === normalizedEmail) {
+        const item = toPublicItem_(normalizedRow, index);
+        item.status = normalizedRow[index['状態']];
+        item._createdAtValue = normalizedRow[index['受付日時']];
+        items.push(item);
+      }
+    });
+  });
+
+  return items
+    .sort(function(a, b) {
+      return getSortTime_(b._createdAtValue) - getSortTime_(a._createdAtValue);
     })
-    .reverse()
-    .map(function(row) {
-      const item = toPublicItem_(row, index);
-      item.status = row[index['状態']];
+    .map(function(item) {
+      delete item._createdAtValue;
       return item;
     });
 }
@@ -271,8 +281,7 @@ function normalizePost_(params) {
 function updatePost_(params) {
   const email = normalizeEmail_(params.email);
   validateManageToken_(email, params.manageToken);
-  const sheet = getSheet_();
-  const match = findEditableRow_(sheet, params.submissionId, email);
+  const match = findEditableSubmission_(params.submissionId, email);
   const visibility = params.visibility === 'private' ? 'private' : 'public';
   const required = {
     area: cleanText_(params.area, 120),
@@ -315,7 +324,7 @@ function updatePost_(params) {
   row[index['更新日時']] = new Date();
   row[index['状態']] = '有効';
   row[index['公開状態']] = visibility === 'public' ? CONFIG.pendingStatus : CONFIG.privateStatus;
-  sheet.getRange(rowNumber, 1, 1, HEADERS.length).setValues([row]);
+  writeSubmissionRow_(match.sheet, rowNumber, row, visibility);
   SpreadsheetApp.flush();
   const manageLink = createManageLink_(email, cleanText_(params.pageUrl));
   notifyAdmin_(row, 'update');
@@ -326,15 +335,14 @@ function updatePost_(params) {
 function cancelPost_(params) {
   const email = normalizeEmail_(params.email);
   validateManageToken_(email, params.manageToken);
-  const sheet = getSheet_();
-  const match = findEditableRow_(sheet, params.submissionId, email);
+  const match = findEditableSubmission_(params.submissionId, email);
   const index = match.index;
   const rowNumber = match.rowNumber;
   const row = match.row;
   row[index['状態']] = '取消済み';
   row[index['公開状態']] = CONFIG.privateStatus;
   row[index['取消日時']] = new Date();
-  sheet.getRange(rowNumber, 1, 1, HEADERS.length).setValues([row]);
+  writeSubmissionRow_(match.sheet, rowNumber, row, 'private');
   SpreadsheetApp.flush();
   const manageLink = createManageLink_(email, cleanText_(params.pageUrl));
   notifyAdmin_(row, 'cancel');
@@ -342,21 +350,25 @@ function cancelPost_(params) {
   return { ok: true, id: row[index['ID']], action: 'cancel' };
 }
 
-function findEditableRow_(sheet, submissionId, email) {
+function findEditableSubmission_(submissionId, email) {
   const id = cleanText_(submissionId, 80);
   if (!id || !email) {
     throw new Error('投稿を特定できません。');
   }
 
-  const values = sheet.getDataRange().getValues();
-  const index = buildHeaderIndex_(values[0]);
-  for (let i = 1; i < values.length; i++) {
-    const row = normalizeRowLength_(values[i], HEADERS.length);
-    if (row[index['ID']] === id && normalizeEmail_(row[index['メールアドレス']]) === email) {
-      if (row[index['状態']] === '取消済み') {
-        throw new Error('この投稿はすでに取消済みです。');
+  const sheets = getAllSubmissionSheets_();
+  for (let s = 0; s < sheets.length; s++) {
+    const sheet = sheets[s];
+    const values = sheet.getDataRange().getValues();
+    const index = buildHeaderIndex_(values[0]);
+    for (let i = 1; i < values.length; i++) {
+      const row = normalizeRowLength_(values[i], HEADERS.length);
+      if (row[index['ID']] === id && normalizeEmail_(row[index['メールアドレス']]) === email) {
+        if (row[index['状態']] === '取消済み') {
+          throw new Error('この投稿はすでに取消済みです。');
+        }
+        return { sheet: sheet, rowNumber: i + 1, row: row, index: index };
       }
-      return { rowNumber: i + 1, row: row, index: index };
     }
   }
   throw new Error('投稿が見つかりません。');
@@ -409,29 +421,77 @@ function getSpreadsheet_() {
 }
 
 function getSheet_() {
-  return prepareSheet_(getSpreadsheet_());
+  return getPublicSubmissionSheet_();
 }
 
-function prepareSheet_(spreadsheet) {
-  let sheet = spreadsheet.getSheetByName(CONFIG.sheetName);
+function getPublicSubmissionSheet_() {
+  return prepareSubmissionSheet_(getSpreadsheet_(), CONFIG.publicSheetName);
+}
+
+function getPrivateSubmissionSheet_() {
+  return prepareSubmissionSheet_(getSpreadsheet_(), CONFIG.privateSheetName);
+}
+
+function getSubmissionSheetByVisibility_(visibility) {
+  return visibility === 'private' ? getPrivateSubmissionSheet_() : getPublicSubmissionSheet_();
+}
+
+function getAllSubmissionSheets_() {
+  const spreadsheet = getSpreadsheet_();
+  return [
+    prepareSubmissionSheet_(spreadsheet, CONFIG.publicSheetName),
+    prepareSubmissionSheet_(spreadsheet, CONFIG.privateSheetName)
+  ];
+}
+
+function prepareSubmissionSheets_(spreadsheet) {
+  prepareSubmissionSheet_(spreadsheet, CONFIG.publicSheetName);
+  prepareSubmissionSheet_(spreadsheet, CONFIG.privateSheetName);
+}
+
+function prepareSubmissionSheet_(spreadsheet, sheetName) {
+  let sheet = spreadsheet.getSheetByName(sheetName);
   if (!sheet) {
-    sheet = spreadsheet.insertSheet(CONFIG.sheetName);
+    sheet = spreadsheet.insertSheet(sheetName);
   }
   prepareHeaders_(sheet, HEADERS);
-  applyPublicStatusValidation_(sheet);
+  applyPublicStatusValidation_(sheet, sheetName !== CONFIG.privateSheetName);
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, HEADERS.length);
   return sheet;
 }
 
+function writeSubmissionRow_(currentSheet, rowNumber, row, visibility) {
+  const targetSheet = getSubmissionSheetByVisibility_(visibility);
+  if (currentSheet.getSheetId() === targetSheet.getSheetId()) {
+    currentSheet.getRange(rowNumber, 1, 1, HEADERS.length).setValues([row]);
+    return;
+  }
 
-function applyPublicStatusValidation_(sheet) {
+  targetSheet.appendRow(row);
+  currentSheet.deleteRow(rowNumber);
+}
+
+function getSortTime_(value) {
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+  const date = new Date(value);
+  const time = date.getTime();
+  return isNaN(time) ? 0 : time;
+}
+
+
+function applyPublicStatusValidation_(sheet, allowPublic) {
   const statusColumn = HEADERS.indexOf('公開状態') + 1;
   if (!statusColumn) {
     return;
   }
+  const statusOptions = allowPublic
+    ? [CONFIG.pendingStatus, CONFIG.publicStatus, CONFIG.privateStatus]
+    : [CONFIG.privateStatus];
   const rule = SpreadsheetApp.newDataValidation()
-    .requireValueInList([CONFIG.pendingStatus, CONFIG.publicStatus, CONFIG.privateStatus], true)
+    .requireValueInList(statusOptions, true)
     .setAllowInvalid(false)
     .build();
   sheet.getRange(2, statusColumn, Math.max(sheet.getMaxRows() - 1, 1), 1).setDataValidation(rule);

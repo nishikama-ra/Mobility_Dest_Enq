@@ -12,6 +12,8 @@ const CONFIG = {
   adminNotifyMethodProperty: 'MOBILITY_NEEDS_ADMIN_NOTIFY_METHOD',
   teamsWebhookUrlProperty: 'TEAMS_WORKFLOW_WEBHOOK_URL',
   sheetName: '投稿',
+  publicSheetName: '投稿一覧（公開可）',
+  privateSheetName: '投稿一覧（公開不可）',
   publicStatus: '公開',
   pendingStatus: '承認待ち',
   privateStatus: '非公開',
