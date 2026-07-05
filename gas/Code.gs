@@ -498,6 +498,7 @@ function buildAdminNotificationSubject_(row, eventType) {
 
 function buildAdminNotificationText_(row, eventType) {
   const eventLabel = getEventLabel_(eventType);
+  const spreadsheetUrl = getAdminSpreadsheetUrl_();
   return [
     '移動ニーズ投稿に更新がありました。',
     '',
@@ -519,12 +520,16 @@ function buildAdminNotificationText_(row, eventType) {
     '',
     'どなたに聞いたか: ' + row[17],
     'ニックネーム: ' + row[18],
-    '記入者: ' + row[19]
+    '記入者: ' + row[19],
+    '',
+    'スプレッドシート:',
+    spreadsheetUrl || '未設定'
   ].join('\n');
 }
 
 function buildTeamsAdminNotificationText_(row, eventType) {
   const eventLabel = getEventLabel_(eventType);
+  const spreadsheetUrl = getAdminSpreadsheetUrl_();
   return [
     '移動ニーズ投稿に更新がありました。',
     '',
@@ -546,8 +551,17 @@ function buildTeamsAdminNotificationText_(row, eventType) {
     'どなたに聞いたか: ' + row[17],
     'ニックネーム: ' + row[18],
     '',
-    '詳細はスプレッドシートを確認してください。'
+    '詳細はスプレッドシートを確認してください。',
+    spreadsheetUrl || 'スプレッドシートURL未設定'
   ].join('\n');
+}
+
+function getAdminSpreadsheetUrl_() {
+  const spreadsheetId = PropertiesService.getScriptProperties().getProperty(CONFIG.spreadsheetIdProperty);
+  if (!spreadsheetId) {
+    return '';
+  }
+  return 'https://docs.google.com/spreadsheets/d/' + spreadsheetId + '/edit';
 }
 
 function sendAdminNotification_(subject, body, row, eventType) {
