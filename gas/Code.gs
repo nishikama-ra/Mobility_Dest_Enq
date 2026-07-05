@@ -486,14 +486,19 @@ function outputJson_(callback, payload) {
 }
 
 function notifyAdmin_(row, eventType) {
-  const email = getAdminEmail_();
-  if (!email) {
-    return;
-  }
+  const subject = buildAdminNotificationSubject_(row, eventType);
+  const body = buildAdminNotificationText_(row, eventType);
+  sendAdminNotification_(subject, body, row, eventType);
+}
 
-  const eventLabel = eventType === 'cancel' ? '取消' : eventType === 'update' ? '訂正' : '新規投稿';
-  const subject = '移動ニーズ投稿: ' + eventLabel + ' / ' + (row[9] || '地域未記入');
-  const body = [
+function buildAdminNotificationSubject_(row, eventType) {
+  const eventLabel = getEventLabel_(eventType);
+  return '移動ニーズ投稿: ' + eventLabel + ' / ' + (row[9] || '地域未記入');
+}
+
+function buildAdminNotificationText_(row, eventType) {
+  const eventLabel = getEventLabel_(eventType);
+  return [
     '移動ニーズ投稿に更新がありました。',
     '',
     '区分: ' + eventLabel,
@@ -516,8 +521,183 @@ function notifyAdmin_(row, eventType) {
     'ニックネーム: ' + row[18],
     '記入者: ' + row[19]
   ].join('\n');
+}
 
-  MailApp.sendEmail(email, subject, body);
+function buildTeamsAdminNotificationText_(row, eventType) {
+  const eventLabel = getEventLabel_(eventType);
+  return [
+    '移動ニーズ投稿に更新がありました。',
+    '',
+    '区分: ' + eventLabel,
+    '公開設定: ' + (row[6] === 'public' ? '公開希望' : '事務局のみ'),
+    '公開状態: ' + row[7],
+    '状態: ' + row[5],
+    '地域: ' + row[9],
+    '時間帯: ' + row[10],
+    '移動する人: ' + row[11],
+    '目的カテゴリ: ' + row[12],
+    '目的の内容: ' + row[13],
+    'どこから: ' + row[14],
+    'どこへ: ' + row[15],
+    '',
+    '具体的な場面:',
+    row[16],
+    '',
+    'どなたに聞いたか: ' + row[17],
+    'ニックネーム: ' + row[18],
+    '',
+    '詳細はスプレッドシートを確認してください。'
+  ].join('\n');
+}
+
+function sendAdminNotification_(subject, body, row, eventType) {
+  const method = getAdminNotifyMethod_();
+
+  if (method === 'none') {
+    Logger.log('Admin notification skipped because notify method is none.');
+    return;
+  }
+
+  let mailOk = false;
+  let teamsOk = false;
+
+  if (method === 'email' || method === 'both') {
+    mailOk = sendAdminMail_(subject, body);
+  }
+
+  if (method === 'teams' || method === 'both') {
+    const teamsText = buildTeamsAdminNotificationText_(row, eventType);
+    teamsOk = postToTeamsWorkflow_(teamsText, { title: subject, eventType: eventType });
+  }
+
+  if (method === 'teams' && !teamsOk) {
+    Logger.log('Admin Teams notification failed. Trying mail fallback without logging personal details.');
+    sendAdminMail_(subject, body);
+  }
+
+  Logger.log('Admin notification finished. method=' + method + ', mailOk=' + mailOk + ', teamsOk=' + teamsOk);
+}
+
+function sendAdminMail_(subject, body) {
+  const email = getAdminEmail_();
+  if (!email) {
+    Logger.log('Admin mail skipped because admin email is not configured.');
+    return false;
+  }
+
+  try {
+    MailApp.sendEmail(email, subject, body);
+    return true;
+  } catch (error) {
+    Logger.log('Admin mail failed: ' + sanitizeLogText_(error && error.message ? error.message : error));
+    return false;
+  }
+}
+
+function getEventLabel_(eventType) {
+  return eventType === 'cancel' ? '取消' : eventType === 'update' ? '訂正' : '新規投稿';
+}
+
+function getAdminNotifyMethod_() {
+  const raw = PropertiesService.getScriptProperties().getProperty(CONFIG.adminNotifyMethodProperty);
+  const method = String(raw || CONFIG.defaultAdminNotifyMethod || 'email').trim().toLowerCase();
+  if (['email', 'teams', 'both', 'none'].indexOf(method) !== -1) {
+    return method;
+  }
+  Logger.log('Invalid admin notify method. Falling back to email.');
+  return 'email';
+}
+
+function getTeamsWorkflowWebhookUrl_() {
+  const webhookUrl = PropertiesService.getScriptProperties().getProperty(CONFIG.teamsWebhookUrlProperty);
+  if (!webhookUrl) {
+    Logger.log('Teams workflow webhook URL is not configured.');
+    return '';
+  }
+  return webhookUrl;
+}
+
+function buildTeamsAdaptiveCardPayload_(text, options) {
+  const title = options && options.title ? options.title : '移動ニーズ投稿';
+  return {
+    type: 'message',
+    attachments: [
+      {
+        contentType: 'application/vnd.microsoft.card.adaptive',
+        contentUrl: null,
+        content: {
+          '$schema': 'http://adaptivecards.io/schemas/adaptive-card.json',
+          type: 'AdaptiveCard',
+          version: '1.2',
+          body: [
+            {
+              type: 'TextBlock',
+              text: title,
+              weight: 'Bolder',
+              size: 'Medium',
+              wrap: true
+            },
+            {
+              type: 'TextBlock',
+              text: text,
+              wrap: true
+            }
+          ]
+        }
+      }
+    ]
+  };
+}
+
+function postToTeamsWorkflow_(text, options) {
+  const webhookUrl = getTeamsWorkflowWebhookUrl_();
+  if (!webhookUrl) {
+    return false;
+  }
+
+  try {
+    const payload = buildTeamsAdaptiveCardPayload_(text, options);
+    const payloadText = JSON.stringify(payload);
+    const payloadBytes = getPayloadBytes_(payload);
+    const response = UrlFetchApp.fetch(webhookUrl, {
+      method: 'post',
+      contentType: 'application/json; charset=utf-8',
+      payload: payloadText,
+      muteHttpExceptions: true
+    });
+    const code = response.getResponseCode();
+    const responseText = response.getContentText() || '';
+    const ok = code >= 200 && code < 300;
+
+    Logger.log(
+      'Teams workflow post finished. ok=' + ok +
+      ', status=' + code +
+      ', payloadBytes=' + payloadBytes +
+      ', response=' + sanitizeLogText_(responseText)
+    );
+
+    return ok;
+  } catch (error) {
+    Logger.log('Teams workflow post failed by exception: ' + sanitizeLogText_(error && error.message ? error.message : error));
+    return false;
+  }
+}
+
+function getPayloadBytes_(payload) {
+  const payloadText = JSON.stringify(payload);
+  return Utilities.newBlob(payloadText).getBytes().length;
+}
+
+function sanitizeLogText_(value) {
+  return String(value || '').replace(/[\r\n\t]+/g, ' ').slice(0, 500);
+}
+
+function testPostToTeamsWorkflowAdaptiveCard() {
+  const ok = postToTeamsWorkflow_(
+    'Teams Workflowへのテスト投稿です。\nこの投稿はGASの疎通確認用です。',
+    { title: '移動ニーズ投稿: Teams通知テスト' }
+  );
+  Logger.log('Teams workflow adaptive card test finished. ok=' + ok);
 }
 
 function notifyUser_(row, eventType, manageLink) {

@@ -9,9 +9,12 @@ const CONFIG = {
   defaultAdminEmail: 'kazutoshi_ishikawa@nishikamakura-jichikai.com',
   spreadsheetIdProperty: 'MOBILITY_NEEDS_SPREADSHEET_ID',
   adminEmailProperty: 'MOBILITY_NEEDS_ADMIN_EMAIL',
+  adminNotifyMethodProperty: 'MOBILITY_NEEDS_ADMIN_NOTIFY_METHOD',
+  teamsWebhookUrlProperty: 'TEAMS_WORKFLOW_WEBHOOK_URL',
   sheetName: '投稿',
   publicStatus: '公開',
   pendingStatus: '承認待ち',
   privateStatus: '非公開',
+  defaultAdminNotifyMethod: 'email',
   maxPublicItems: 80
 };
