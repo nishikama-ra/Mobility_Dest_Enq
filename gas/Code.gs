@@ -191,6 +191,8 @@ function toPublicItem_(row, index) {
     createdAt: formatDate_(row[index['受付日時']]),
     date: row[index['記入日']] || formatDate_(row[index['受付日時']]),
     status: row[index['状態']],
+    visibility: row[index['公開設定']],
+    publicStatus: row[index['公開状態']],
     area: row[index['地域']],
     timeBand: row[index['時間帯']],
     personType: row[index['移動する人']],
@@ -271,20 +273,48 @@ function updatePost_(params) {
   validateManageToken_(email, params.manageToken);
   const sheet = getSheet_();
   const match = findEditableRow_(sheet, params.submissionId, email);
-  const correction = cleanText_(params.correctionStory, 2000);
-  if (!correction) {
-    throw new Error('訂正内容を入力してください。');
-  }
+  const visibility = params.visibility === 'private' ? 'private' : 'public';
+  const required = {
+    area: cleanText_(params.area, 120),
+    timeBand: cleanText_(params.timeBand, 120),
+    personType: cleanText_(params.personType, 120),
+    purposeCategory: cleanText_(params.purposeCategory, 120),
+    purposeDetail: cleanText_(params.purposeDetail, 200),
+    fromPlace: cleanText_(params.fromPlace, 160),
+    toPlace: cleanText_(params.toPlace, 160),
+    story: cleanText_(params.story, 2000),
+    heardFrom: cleanText_(params.heardFrom, 160),
+    nickname: cleanText_(params.nickname, 80)
+  };
+
+  assertRequired_(required.area, 'どの地域では');
+  assertRequired_(required.timeBand, 'どの時間帯に');
+  assertRequired_(required.personType, 'どんな人が');
+  assertRequired_(required.purposeCategory, 'どんな目的で（カテゴリ）');
+  assertRequired_(required.purposeDetail, '目的の内容');
+  assertRequired_(required.fromPlace, 'どこから');
+  assertRequired_(required.toPlace, 'どこへ');
+  assertRequired_(required.story, '具体的な場面や困っていること');
+  assertRequired_(required.heardFrom, 'どなたにお聞きになりましたか？');
+  assertRequired_(required.nickname, 'ニックネーム（公開時の表示名）');
 
   const index = match.index;
   const rowNumber = match.rowNumber;
   const row = match.row;
-  row[index['具体的な場面']] = correction;
+  row[index['公開設定']] = visibility;
+  row[index['地域']] = required.area;
+  row[index['時間帯']] = required.timeBand;
+  row[index['移動する人']] = required.personType;
+  row[index['目的カテゴリ']] = required.purposeCategory;
+  row[index['目的の内容']] = required.purposeDetail;
+  row[index['どこから']] = required.fromPlace;
+  row[index['どこへ']] = required.toPlace;
+  row[index['具体的な場面']] = required.story;
+  row[index['どなたにお聞きになりましたか']] = required.heardFrom;
+  row[index['ニックネーム']] = required.nickname;
   row[index['更新日時']] = new Date();
   row[index['状態']] = '有効';
-  if (row[index['公開設定']] === 'public') {
-    row[index['公開状態']] = CONFIG.pendingStatus;
-  }
+  row[index['公開状態']] = visibility === 'public' ? CONFIG.pendingStatus : CONFIG.privateStatus;
   sheet.getRange(rowNumber, 1, 1, HEADERS.length).setValues([row]);
   SpreadsheetApp.flush();
   const manageLink = createManageLink_(email, cleanText_(params.pageUrl));
@@ -589,5 +619,5 @@ function formatDate_(value) {
     return '';
   }
   const date = value instanceof Date ? value : new Date(value);
-  return Utilities.formatDate(date, 'Asia/Tokyo', 'yyyy/MM/dd');
+  return Utilities.formatDate(date, 'Asia/Tokyo', 'yyyy-MM-dd HH:mm:ss');
 }

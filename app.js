@@ -7,9 +7,105 @@ const ideasList = document.querySelector("#ideasList");
 const refreshButton = document.querySelector("#refreshButton");
 const myPostsPanel = document.querySelector("#myPostsPanel");
 const myPostsList = document.querySelector("#myPostsList");
+const appToast = document.querySelector("#appToast");
+const appToastMessage = document.querySelector("#appToastMessage");
+const appToastClose = document.querySelector("#appToastClose");
+const appToastIcon = document.querySelector("#appToastIcon");
 const query = new URLSearchParams(window.location.search);
 const manageEmail = query.get("manageEmail") || "";
 const manageToken = query.get("manageToken") || "";
+
+
+function showToast(message, kicker = "送信できました", tone = "success") {
+  if (!appToast || !appToastMessage) return;
+  const kickerNode = appToast.querySelector(".app-toast-kicker");
+  if (kickerNode) kickerNode.textContent = kicker;
+  if (appToastIcon) {
+    appToastIcon.className = `app-toast-icon app-toast-icon-${tone}`;
+  }
+  appToastMessage.textContent = message;
+  appToast.hidden = false;
+}
+
+function hideToast() {
+  if (appToast) appToast.hidden = true;
+}
+
+function clearValidationMessages(form) {
+  form.querySelectorAll(".field-error").forEach((node) => node.remove());
+  form.querySelectorAll("[aria-invalid='true']").forEach((field) => {
+    field.removeAttribute("aria-invalid");
+  });
+}
+
+function getValidationMessage(field) {
+  if (field.validity.valueMissing) {
+    if (field.type === "checkbox") return "同意にチェックしてください。";
+    if (field.tagName === "SELECT") return "選択してください。";
+    return "入力してください。";
+  }
+  if (field.validity.typeMismatch && field.type === "email") {
+    return "メールアドレスの形式で入力してください。";
+  }
+  if (field.validity.tooLong) {
+    return `${field.maxLength}文字以内で入力してください。`;
+  }
+  return "入力内容を確認してください。";
+}
+
+function showFieldError(field) {
+  const message = document.createElement("span");
+  message.className = "field-error";
+  message.textContent = getValidationMessage(field);
+  field.setAttribute("aria-invalid", "true");
+
+  if (field.type === "checkbox") {
+    field.closest("label")?.append(message);
+    return;
+  }
+  field.insertAdjacentElement("afterend", message);
+}
+
+function validateForm(form, summaryNode) {
+  clearValidationMessages(form);
+  const invalidFields = Array.from(form.elements).filter((field) => {
+    return field instanceof HTMLElement && typeof field.checkValidity === "function" && !field.checkValidity();
+  });
+
+  if (invalidFields.length === 0) return true;
+  invalidFields.forEach(showFieldError);
+  if (summaryNode) {
+    summaryNode.textContent = "未入力または形式が違う項目があります。赤いメッセージの箇所を確認してください。";
+  }
+  invalidFields[0].focus({ preventScroll: true });
+  invalidFields[0].scrollIntoView({ behavior: "smooth", block: "center" });
+  return false;
+}
+
+function installValidationClear(form) {
+  form.addEventListener("input", (event) => {
+    const field = event.target;
+    if (!(field instanceof HTMLElement) || !field.matches("input, select, textarea")) return;
+    if (!field.checkValidity()) return;
+    field.removeAttribute("aria-invalid");
+    const next = field.nextElementSibling;
+    if (next?.classList.contains("field-error")) next.remove();
+    if (field.type === "checkbox") {
+      field.closest("label")?.querySelector(".field-error")?.remove();
+    }
+  });
+  form.addEventListener("change", (event) => {
+    const field = event.target;
+    if (!(field instanceof HTMLElement) || !field.matches("input, select, textarea")) return;
+    if (!field.checkValidity()) return;
+    field.removeAttribute("aria-invalid");
+    const next = field.nextElementSibling;
+    if (next?.classList.contains("field-error")) next.remove();
+    if (field.type === "checkbox") {
+      field.closest("label")?.querySelector(".field-error")?.remove();
+    }
+  });
+}
 
 function isConfigured() {
   return GAS_WEB_APP_URL.startsWith("https://script.google.com/");
@@ -26,6 +122,36 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function formatDisplayDate(value) {
+  if (!value) return "";
+  const text = String(value);
+  const date = new Date(text);
+  if (Number.isNaN(date.getTime())) {
+    return text.replace("T", " ").replace(/\.\d{3}Z$/, "").replace(/Z$/, "");
+  }
+  const parts = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  }).formatToParts(date).reduce((acc, part) => {
+    acc[part.type] = part.value;
+    return acc;
+  }, {});
+  return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
+}
+
+function purposeOptions(selectedValue) {
+  return ["通勤・通学", "通院", "買い物", "習い事", "お出かけ", "その他"].map((value) => {
+    const selected = value === selectedValue ? " selected" : "";
+    return `<option${selected}>${escapeHtml(value)}</option>`;
+  }).join("");
 }
 
 function buildTitle(item) {
@@ -126,7 +252,7 @@ function renderNeeds(payload) {
     const route = [item.fromPlace, item.toPlace].filter(Boolean).join(" → ");
     const tags = [item.timeBand, item.personType, item.purposeCategory].filter(Boolean);
     const postedBy = item.nickname || "地域の声";
-    const date = item.date || item.createdAt || "";
+    const date = formatDisplayDate(item.createdAt || item.date || "");
 
     return `
       <article class="idea-card">
@@ -158,7 +284,7 @@ function buildPostFields(item) {
   return `
     <div class="idea-meta">
       <span>${escapeHtml(item.status || "有効")}</span>
-      ${item.date ? `<span>${escapeHtml(item.date)}</span>` : ""}
+      ${item.createdAt ? `<span>${escapeHtml(formatDisplayDate(item.createdAt))}</span>` : ""}
     </div>
     <h3>${escapeHtml(buildTitle(item))}</h3>
     ${route ? `<div class="idea-route"><span>${escapeHtml(route)}</span></div>` : ""}
@@ -166,6 +292,63 @@ function buildPostFields(item) {
     <div class="idea-tags">
       ${[item.timeBand, item.personType, item.purposeCategory].filter(Boolean).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}
     </div>
+  `;
+}
+
+function buildEditablePostForm(item) {
+  return `
+    <div class="field-grid">
+      <label>
+        <span>公開のしかた</span>
+        <select name="visibility" required>
+          <option value="public"${item.visibility === "private" ? "" : " selected"}>Webで公開してよい</option>
+          <option value="private"${item.visibility === "private" ? " selected" : ""}>事務局だけに知らせる</option>
+        </select>
+      </label>
+      <label>
+        <span>どの地域では</span>
+        <input name="area" required maxlength="120" value="${escapeHtml(item.area)}">
+      </label>
+      <label>
+        <span>どの時間帯に</span>
+        <input name="timeBand" required maxlength="120" value="${escapeHtml(item.timeBand)}">
+      </label>
+      <label>
+        <span>どんな人が</span>
+        <input name="personType" required maxlength="120" value="${escapeHtml(item.personType)}">
+      </label>
+      <label>
+        <span>どんな目的で（カテゴリ）</span>
+        <select name="purposeCategory" required>
+          <option value="">選んでください</option>
+          ${purposeOptions(item.purposeCategory)}
+        </select>
+      </label>
+      <label>
+        <span>目的の内容</span>
+        <input name="purposeDetail" required maxlength="200" value="${escapeHtml(item.purposeDetail)}">
+      </label>
+      <label>
+        <span>どこから</span>
+        <input name="fromPlace" required maxlength="160" value="${escapeHtml(item.fromPlace)}">
+      </label>
+      <label>
+        <span>どこへ</span>
+        <input name="toPlace" required maxlength="160" value="${escapeHtml(item.toPlace)}">
+      </label>
+    </div>
+    <label class="wide-field">
+      <span>具体的な場面や困っていること</span>
+      <textarea name="story" rows="4" required maxlength="2000">${escapeHtml(item.story)}</textarea>
+    </label>
+    <label class="wide-field">
+      <span>ご自身のご経験ですか？あるいはどなたかにお聞きになったものでしょうか？</span>
+      <input name="heardFrom" required maxlength="160" value="${escapeHtml(item.heardFrom)}">
+    </label>
+    <label class="wide-field">
+      <span>ニックネーム（公開時の表示名）</span>
+      <input name="nickname" required maxlength="80" value="${escapeHtml(item.nickname)}">
+    </label>
   `;
 }
 
@@ -178,9 +361,16 @@ function renderMyPosts(payload) {
     return;
   }
 
-  myPostsList.innerHTML = items.map((item) => `
-    <article class="idea-card manage-card">
-      ${buildPostFields(item)}
+  myPostsList.innerHTML = items.map((item) => {
+    const summaryDate = formatDisplayDate(item.createdAt || item.date || "");
+    return `
+    <details class="manage-post" id="post-${escapeHtml(item.id)}">
+      <summary>
+        <span class="manage-post-date">${escapeHtml(summaryDate || "投稿日時未記録")}</span>
+        <span class="manage-post-title">${escapeHtml(buildTitle(item))}</span>
+      </summary>
+      <div class="idea-card manage-card">
+        ${buildPostFields(item)}
       <form class="inline-manage-form" method="post" target="submitFrame" novalidate>
         <input type="hidden" name="source" value="github-pages">
         <input type="hidden" name="formVersion" value="1">
@@ -188,20 +378,21 @@ function renderMyPosts(payload) {
         <input type="hidden" name="manageToken" value="${escapeHtml(manageToken)}">
         <input type="hidden" name="submissionId" value="${escapeHtml(item.id)}">
         <input type="hidden" name="pageUrl" value="${escapeHtml(getPageUrl())}">
-        <label class="wide-field">
-          <span>訂正後の具体的な場面</span>
-          <textarea name="correctionStory" rows="4" maxlength="2000" placeholder="訂正する場合は、差し替えたい内容をここに入力してください。">${escapeHtml(item.story)}</textarea>
-        </label>
+        <input type="hidden" name="correctionStory" value="${escapeHtml(item.story)}">
+        ${buildEditablePostForm(item)}
         <div class="form-actions split-actions">
           <button type="submit" name="action" value="update">訂正する</button>
           <button class="quiet-button" type="submit" name="action" value="cancel">取消する</button>
           <p class="inline-message" role="status" aria-live="polite"></p>
         </div>
       </form>
-    </article>
-  `).join("");
+      </div>
+    </details>
+  `;
+  }).join("");
 
   myPostsList.querySelectorAll(".inline-manage-form").forEach((form) => {
+    installValidationClear(form);
     form.addEventListener("submit", (event) => {
       if (!isConfigured()) {
         event.preventDefault();
@@ -209,15 +400,19 @@ function renderMyPosts(payload) {
         return;
       }
       const action = event.submitter?.value || "update";
-      if (action === "update" && !form.elements.correctionStory.value.trim()) {
+      if (action === "update" && !validateForm(form, form.querySelector(".inline-message"))) {
         event.preventDefault();
-        form.querySelector(".inline-message").textContent = "訂正内容を入力してください。";
         return;
+      }
+      if (action === "update" && form.elements.correctionStory && form.elements.story) {
+        form.elements.correctionStory.value = form.elements.story.value;
       }
       form.action = GAS_WEB_APP_URL;
       form.querySelector(".inline-message").textContent = action === "cancel" ? "取消を送信しています。" : "訂正を送信しています。";
       window.setTimeout(() => {
-        form.querySelector(".inline-message").textContent = action === "cancel" ? "取消を受け付けました。確認メールを送信します。" : "訂正を受け付けました。確認メールを送信します。";
+        const doneMessage = action === "cancel" ? "取消を受け付けました。確認メールを送信します。" : "訂正を受け付けました。確認メールを送信します。";
+        form.querySelector(".inline-message").textContent = doneMessage;
+        showToast(doneMessage, action === "cancel" ? "取消を受け付けました" : "訂正を受け付けました", action === "cancel" ? "cancel" : "edit");
         loadPublicNeeds();
         loadMyPosts();
       }, 1200);
@@ -244,7 +439,7 @@ needsForm.addEventListener("submit", (event) => {
     return;
   }
 
-  if (!needsForm.reportValidity()) {
+  if (!validateForm(needsForm, formMessage)) {
     event.preventDefault();
     return;
   }
@@ -255,6 +450,7 @@ needsForm.addEventListener("submit", (event) => {
 
   window.setTimeout(() => {
     formMessage.textContent = "投稿を受け付けました。公開希望の投稿は事務局の確認後に公開されます。入力したメールアドレスへ投稿内容と確認・変更用リンクを送信します。";
+    showToast("投稿を受け付けました。確認メールを送信します。", "投稿ありがとうございます", "success");
     needsForm.reset();
     needsForm.querySelector('input[name="visibility"][value="public"]').checked = true;
     loadPublicNeeds();
@@ -268,7 +464,7 @@ manageLinkForm.addEventListener("submit", (event) => {
     return;
   }
 
-  if (!manageLinkForm.reportValidity()) {
+  if (!validateForm(manageLinkForm, manageMessage)) {
     event.preventDefault();
     return;
   }
@@ -279,9 +475,20 @@ manageLinkForm.addEventListener("submit", (event) => {
 
   window.setTimeout(() => {
     manageMessage.textContent = "入力したメールアドレスへ確認・変更用リンクを送信しました。メールを確認してください。";
+    showToast("確認・変更用リンクをメールで送信しました。", "メールを確認してください", "mail");
   }, 1000);
 });
 
+appToastClose?.addEventListener("click", hideToast);
+appToast?.addEventListener("click", (event) => {
+  if (event.target === appToast) hideToast();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") hideToast();
+});
+
+installValidationClear(needsForm);
+installValidationClear(manageLinkForm);
 refreshButton.addEventListener("click", loadPublicNeeds);
 loadPublicNeeds();
 loadMyPosts();

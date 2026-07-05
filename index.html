@@ -3,30 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>移動しやすいまち西鎌倉 投稿ボード</title>
-  <meta name="description" content="西鎌倉地域の移動ニーズを集める投稿ボードです。公開希望または事務局のみを選んで投稿できます。">
+  <title>移動しやすいまち西鎌倉地区 投稿ボード</title>
+  <meta name="description" content="西鎌倉地区の移動ニーズを集める投稿ボードです。公開希望または事務局のみを選んで投稿できます。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Kiwi+Maru:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <nav class="topbar" aria-label="ページ内メニュー">
-      <a class="brand" href="#top" aria-label="移動しやすいまち西鎌倉 トップへ">
-        <span class="brand-mark" aria-hidden="true">道</span>
-        <span>移動しやすいまち西鎌倉</span>
-      </a>
-      <div class="nav-actions">
-        <a href="#ideas">みんなの声</a>
-      </div>
-    </nav>
-
-    <section id="top" class="hero-inner">
+  <header id="top" class="hero">
+    <section class="hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow">西鎌倉の移動メモを集めています</p>
+        <p class="eyebrow">西鎌倉地区の移動メモを集めています</p>
         <h1>「ここから、ここへ行きたい」を教えてください。</h1>
-        <p class="lead">通勤、通学、通院、お買い物、習い事、お出かけ。日々の小さな移動の困りごとや、あったら助かる場面を、地域のみんなで集める投稿ボードです。</p>
+        <p class="lead">通勤、通学、通院、お買い物、習い事、お出かけ。<BR>日々の小さな移動の困りごとや、あったら助かる場面を、地域のみんなで集める投稿ボードです。</p>
         <div class="hero-links">
           <a class="primary-link" href="#post">移動ニーズを投稿する</a>
           <a class="secondary-link" href="#ideas">みんなの投稿を見る</a>
@@ -34,12 +24,13 @@
         <figure class="hero-illustration" aria-label="地区内の移動先と道のイメージ">
           <img src="assets/mobility-map.png" alt="地区内の施設や移動経路を描いたイラスト">
         </figure>
-      </div>
-      <div class="hero-panel" aria-label="投稿例">
-        <p class="panel-label">たとえば</p>
-        <p>「平日朝、鎌倉山から西鎌小学校へ」</p>
-        <p>「日中、西鎌倉から腰越図書館へ」</p>
-        <p>「休日午前、駅からみんなの家へ」</p>
+        <div class="hero-panel" aria-label="投稿例">
+          <p class="panel-label">たとえば</p>
+          <p>「休日午後、御所ケ丘から西鎌みんなの家へ」</p>
+          <p>「日中、西鎌倉３丁目から腰越図書館へ」</p>
+          <p>「平日朝、鎌倉山２丁目から西鎌倉小学校へ」</p>
+          <p>「休日午前、手広から広町緑地へ」</p>
+        </div>
       </div>
     </section>
   </header>
@@ -55,7 +46,7 @@
         <article>
           <span class="step">2</span>
           <h2>公開範囲を選ぶ</h2>
-          <p>Webで公開してよい投稿も、事務局の確認後に公開されます。事務局だけに知らせたい投稿も選べます。</p>
+          <p>Webで公開してよい投稿も、事務局の確認後に公開されます。事務局だけに知らせたい場合は「公開のしかた」で「事務局だけに知らせる」を選んでください。</p>
         </article>
         <article>
           <span class="step">3</span>
@@ -69,7 +60,7 @@
       <div class="section-heading">
         <p class="eyebrow">投稿フォーム</p>
         <h2>移動ニーズを投稿する</h2>
-        <p>すべての項目をご記入ください。公開希望の投稿も、事務局の承認後に公開されます。</p>
+        <p>各項目ともご入力ください。公開希望の投稿も、事務局の承認後に公開されます。</p>
       </div>
 
       <form id="needsForm" class="needs-form" method="post" target="submitFrame" novalidate>
@@ -84,35 +75,35 @@
             <input type="radio" name="visibility" value="public" checked>
             <span>
               <strong>Webで公開してよい</strong>
-              <small>投稿後すぐには公開されません。事務局が内容を確認し、承認したものだけ一覧に出ます。</small>
+              <small>事務局が内容を確認したあとで公開されます。<BR>公開にあたって確認事項がある場合は記載のメールアドレスに問い合わせがいくことがあります</small>
             </span>
           </label>
           <label class="choice-card">
             <input type="radio" name="visibility" value="private">
             <span>
               <strong>事務局だけに知らせる</strong>
-              <small>公開一覧には表示せず、事務局の確認用シートに保存します。</small>
+              <small>公開一覧には表示せず、事務局に通知されるのみとなります。</small>
             </span>
           </label>
         </fieldset>
 
-        <p class="form-note">個人が特定される情報や誹謗中傷は記載しないでください。</p>
+        <p class="form-note">誹謗中傷のおそれがある内容、ご自身を含め個人が特定される情報やは記載しないでください。</p>
 
         <div class="field-grid">
           <label>
-            <span>どの地域では <small class="field-note">必須</small></span>
-            <input name="area" autocomplete="address-level2" required maxlength="120" placeholder="例: 御所ケ丘、手広、西鎌倉全域">
+            <span>どの地域では</span>
+            <input name="area" autocomplete="address-level2" required maxlength="120" placeholder="例: 御所ケ丘、鎌倉山、西鎌倉地区全域">
           </label>
           <label>
-            <span>どの時間帯に <small class="field-note">必須</small></span>
+            <span>どの時間帯に</span>
             <input name="timeBand" required maxlength="120" placeholder="例: 平日朝、日中、休日午前、夜">
           </label>
           <label>
-            <span>どんな人が <small class="field-note">必須</small></span>
+            <span>どんな人が</span>
             <input name="personType" required maxlength="120" placeholder="例: 高齢の方、保護者、通勤・通学の人">
           </label>
           <label>
-            <span>どんな目的で（カテゴリ） <small class="field-note">必須</small></span>
+            <span>どんな目的で（カテゴリ）</span>
             <select name="purposeCategory" required>
               <option value="">選んでください</option>
               <option>通勤・通学</option>
@@ -125,33 +116,33 @@
             </select>
           </label>
           <label>
-            <span>目的の内容 <small class="field-note">必須</small></span>
+            <span>目的の内容</span>
             <input name="purposeDetail" required maxlength="200" placeholder="例: 毎週の通院、駅までの送迎、買い物帰りの移動">
           </label>
           <label>
-            <span>どこから <small class="field-note">必須</small></span>
+            <span>どこから</span>
             <input name="fromPlace" required maxlength="160" placeholder="例: 自宅、鎌倉山、西鎌倉駅">
           </label>
           <label>
-            <span>どこへ <small class="field-note">必須</small></span>
+            <span>どこへ</span>
             <input name="toPlace" required maxlength="160" placeholder="例: 病院、腰越図書館、大船駅">
           </label>
         </div>
 
         <label class="wide-field">
-          <span>具体的な場面や困っていること <small class="field-note">必須</small></span>
+          <span>具体的な場面や困っていること</span>
           <textarea name="story" rows="5" required maxlength="2000" placeholder="例: 免許返納後、毎週の通院に一人で行けるか不安。タクシーは高く、バス停まで歩くのも大変です。"></textarea>
         </label>
 
         <label class="wide-field">
-          <span>どなたにお聞きになりましたか？ <small class="field-note">必須</small></span>
+          <span>ご自身のご経験ですか？あるいはどなたかにお聞きになったものでしょうか？</span>
           <input name="heardFrom" required maxlength="160" placeholder="例: ご自身、近所の方、ご友人、保護者同士">
         </label>
 
         <div class="field-grid single-field public-name-field">
           <label>
-            <span>ニックネーム（公開時の表示名） <small class="field-note">必須</small></span>
-            <input name="nickname" required maxlength="80" placeholder="例: 西鎌倉の住民、事務局メモ">
+            <span>ニックネーム（公開時の表示名）</span>
+            <input name="nickname" required maxlength="80">
           </label>
         </div>
 
@@ -161,18 +152,18 @@
 
         <div class="field-grid compact private-fields">
           <label>
-            <span>記入者 <small class="field-note">必須</small></span>
-            <input name="writerName" required maxlength="120" placeholder="例: 氏名、団体名、担当者名">
+            <span>記入者名</span>
+            <input name="writerName" required maxlength="120">
           </label>
           <label>
-            <span>メールアドレス <small class="field-note">必須</small></span>
+            <span>メールアドレス</span>
             <input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="例: name@example.com">
           </label>
         </div>
 
         <label class="consent-line">
           <input type="checkbox" name="consent" value="yes" required>
-          <span>投稿内容が事務局で確認・集約されること、公開希望の投稿も承認後に公開されること、入力したメールアドレスへ確認・変更用メールが送られることに同意します。</span>
+          <span> メールアドレスを除く投稿内容が事務局で広報、市役所等関係者との折衝に活用されることに同意します。</span>
         </label>
 
         <div class="form-actions">
@@ -185,9 +176,9 @@
 
     <section id="manage" class="manage-section">
       <div class="section-heading">
-        <p class="eyebrow">投稿後の手続き</p>
+        <p class="eyebrow">ご自身の投稿内容</p>
         <h2>投稿の確認・取消・訂正</h2>
-        <p>メールアドレスを入力すると、本人宛に確認・変更用リンクが届きます。そのリンクから自分の投稿を確認・訂正・取消できます。</p>
+        <p>メールアドレスを入力すると、本人宛に確認・変更用リンクが届きます。<BR>そのリンクから自分の投稿を確認・訂正・取消できます。</p>
       </div>
 
       <form id="manageLinkForm" class="needs-form manage-form" method="post" target="submitFrame" novalidate>
@@ -197,7 +188,7 @@
         <input type="hidden" name="pageUrl">
         <div class="field-grid single-field">
           <label>
-            <span>メールアドレス <small class="field-note">必須</small></span>
+            <span>メールアドレス</span>
             <input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="投稿時に入力したメールアドレス">
           </label>
         </div>
@@ -219,7 +210,7 @@
     <section id="ideas" class="ideas-section">
       <div class="section-heading inline-heading">
         <div>
-          <p class="eyebrow">承認後に公開された投稿</p>
+          <p class="eyebrow">公開された投稿です</p>
           <h2>みんなの移動メモ</h2>
         </div>
         <button id="refreshButton" type="button">更新</button>
@@ -231,10 +222,21 @@
   </main>
 
   <footer>
-    <p>西鎌倉地区町内自治会連合会 モビリティ委員会</p>
+    <p>事務局：西鎌倉地区町内・自治会連合会 新たな移動手段検討委員会</p>
     <p>投稿内容は、移動しやすいまちづくりの検討材料として扱います。</p>
   </footer>
 
-  <script src="app.js?v=20260705a"></script>
+  <div id="appToast" class="app-toast" role="status" aria-live="polite" hidden>
+    <div class="app-toast-dialog">
+      <div id="appToastIcon" class="app-toast-icon" aria-hidden="true">
+        <span class="app-toast-icon-mark"></span>
+      </div>
+      <p class="app-toast-kicker">送信できました</p>
+      <p id="appToastMessage"></p>
+      <button type="button" id="appToastClose">閉じる</button>
+    </div>
+  </div>
+
+  <script src="app.js?v=20260705e"></script>
 </body>
 </html>
