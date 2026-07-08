@@ -215,7 +215,7 @@ function callJsonp(url, onSuccess, onError) {
   const timeoutId = window.setTimeout(() => {
     cleanupJsonp(callbackName, script);
     onError?.("通信に失敗しました。ページを再読み込みしてもう一度お試しください。");
-  }, 12000);
+  }, 20000);
 
   window[callbackName] = (payload) => {
     window.clearTimeout(timeoutId);
