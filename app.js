@@ -157,7 +157,7 @@ function purposeOptions(selectedValue) {
 function buildTitle(item) {
   const area = item.area || "地域未記入";
   const purpose = item.purposeDetail || item.purposeCategory || "移動ニーズ";
-  return `${area}の${purpose}`;
+  return `${area}…${purpose}`;
 }
 
 function buildApiUrl(params) {
