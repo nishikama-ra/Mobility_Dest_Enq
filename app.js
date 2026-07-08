@@ -244,7 +244,7 @@ function renderNeeds(payload) {
   const items = Array.isArray(payload) ? payload : payload.items || [];
 
   if (!items.length) {
-    ideasList.innerHTML = '<p class="empty-state">まだ公開投稿はありません。最初の移動メモをお寄せください。</p>';
+    ideasList.innerHTML = '<p class="empty-state">まだ公開投稿はありません。最初の移動メモをお寄せいただくと表示されます。</p>';
     return;
   }
 
