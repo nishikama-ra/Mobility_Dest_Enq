@@ -269,11 +269,17 @@ function renderNeeds(payload) {
   }).join("");
 }
 
-function loadPublicNeeds() {
+function loadPublicNeeds(retry = false) {
   callApi(
     { action: "list" },
     renderNeeds,
     (message) => {
+      if (!retry) {
+        ideasList.innerHTML = '<p class="empty-state">読み込み中です。通信が混み合っているため、もう一度試しています。</p>';
+        window.setTimeout(() => loadPublicNeeds(true), 2000);
+        return;
+      }
+
       ideasList.innerHTML = `<p class="config-warning">${escapeHtml(message)}</p>`;
     }
   );
