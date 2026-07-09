@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-09T11:48:57.316Z",
+  "generatedAt": "2026-07-09T11:58:39.077Z",
   "items": [
+    {
+      "id": "6344f71b-ddbb-4d2b-a61f-62660aa3f932",
+      "createdAt": "2026-07-09 20:58:06",
+      "date": "2026-07-09T11:58:06.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "修正後テスト１",
+      "timeBand": "修正後テスト２",
+      "personType": "修正後テスト３",
+      "purposeCategory": "習い事・地域活動",
+      "purposeDetail": "修正後テスト４",
+      "fromPlace": "修正後テスト５",
+      "toPlace": "修正後テスト６",
+      "story": "修正後テスト７",
+      "heardFrom": "修正後テスト８",
+      "nickname": "修正後テスト９"
+    },
     {
       "id": "c96cfde1-bda3-469c-8cf4-333d1ac75629",
       "createdAt": "2026-07-08 22:27:33",
