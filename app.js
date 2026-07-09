@@ -276,7 +276,7 @@ function loadPublicNeeds(options = {}) {
       renderNeeds(payload);
 
       if (manual) {
-        showToast("公開投稿を更新しました。", "更新しました", "success");
+        showToast("公開投稿の表示を更新しました。", "更新しました", "success");
       }
 
       setRefreshButtonLoading(false);
