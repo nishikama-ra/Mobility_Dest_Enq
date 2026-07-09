@@ -176,35 +176,6 @@ function callApi(params, onSuccess, onError) {
   callJsonp(url, onSuccess, onError);
 }
 
-  const url = buildApiUrl(params);
-  if (window.fetch) {
-    const controller = window.AbortController ? new AbortController() : null;
-    const timeoutId = window.setTimeout(() => controller?.abort(), 15000);
-    fetch(url.toString(), {
-      cache: "no-store",
-      redirect: "follow",
-      signal: controller?.signal
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((payload) => {
-        window.clearTimeout(timeoutId);
-        handleApiPayload(payload, onSuccess, onError);
-      })
-      .catch(() => {
-        window.clearTimeout(timeoutId);
-        callJsonp(url, onSuccess, onError);
-      });
-    return;
-  }
-
-  callJsonp(url, onSuccess, onError);
-}
-
 function handleApiPayload(payload, onSuccess, onError) {
   if (payload && payload.ok === false) {
     onError?.(payload.error || "処理に失敗しました。");
