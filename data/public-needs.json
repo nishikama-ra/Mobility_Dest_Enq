@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-09T11:39:48.904Z",
+  "generatedAt": "2026-07-09T11:48:57.316Z",
   "items": [
     {
       "id": "c96cfde1-bda3-469c-8cf4-333d1ac75629",
@@ -161,6 +161,24 @@
       "fromPlace": "自宅",
       "toPlace": "県道32号・一部304号手広周辺のロードサイドショップ各種",
       "story": "手広周辺のスーパー、ドラッグストアでの買い物に行くのに直通するバスがなく車でしか行けません。",
+      "heardFrom": "自分",
+      "nickname": "(事務局代行入力)"
+    },
+    {
+      "id": "421d8da0-299a-4f88-99de-6a7682511bdb",
+      "createdAt": "2026-07-05 21:56:47",
+      "date": "2026-07-05T12:56:47.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉地区全域",
+      "timeBand": "日中 特に雨の日",
+      "personType": "全世代",
+      "purposeCategory": "レジャー・お出かけ",
+      "purposeDetail": "図書館利用",
+      "fromPlace": "自宅・西鎌倉駅",
+      "toPlace": "腰越図書館",
+      "story": "腰越図書館への公共交通機関がなく、自転車も使えない雨の日は大変です。",
       "heardFrom": "自分",
       "nickname": "(事務局代行入力)"
     },
