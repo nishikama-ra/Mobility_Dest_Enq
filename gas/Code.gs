@@ -912,7 +912,7 @@ function publishPublicNeedsJsonToGitHub() {
 function updateGitHubFile_(path, content, message) {
   const owner = 'nishikama-ra';
   const repo = 'Mobility_Dest_Enq';
-  const branch = 'main';
+  const branch = 'public-data';
   const token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
 
   if (!token) {
@@ -963,4 +963,54 @@ function updateGitHubFile_(path, content, message) {
   if (code < 200 || code >= 300) {
     throw new Error('GitHub file update failed: HTTP ' + code + ' ' + putResponse.getContentText());
   }
+}
+
+function publishPublicNeedsJsonOnEdit(e) {
+  if (!e || !e.range) {
+    return;
+  }
+
+  const sheet = e.range.getSheet();
+  if (sheet.getName() !== CONFIG.publicSheetName) {
+    return;
+  }
+
+  const row = e.range.getRow();
+  if (row <= 1) {
+    return;
+  }
+
+  const header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const index = buildHeaderIndex_(header);
+  const editedColumn = e.range.getColumn();
+
+  const targetColumns = [
+    '受付日時',
+    '記入日',
+    '状態',
+    '公開設定',
+    '公開状態',
+    '地域',
+    '時間帯',
+    '移動する人',
+    '目的カテゴリ',
+    '目的の内容',
+    'どこから',
+    'どこへ',
+    '具体的な場面',
+    'どなたにお聞きになりましたか',
+    'ニックネーム'
+  ]
+    .map(function(name) {
+      return index[name] + 1;
+    })
+    .filter(function(column) {
+      return column > 0;
+    });
+
+  if (targetColumns.indexOf(editedColumn) === -1) {
+    return;
+  }
+
+  publishPublicNeedsJsonToGitHub();
 }
