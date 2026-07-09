@@ -893,3 +893,74 @@ function formatDate_(value) {
   const date = value instanceof Date ? value : new Date(value);
   return Utilities.formatDate(date, 'Asia/Tokyo', 'yyyy-MM-dd HH:mm:ss');
 }
+
+function publishPublicNeedsJsonToGitHub() {
+  const items = getPublicNeeds_();
+  const payload = {
+    ok: true,
+    generatedAt: new Date().toISOString(),
+    items: items
+  };
+
+  updateGitHubFile_(
+    'data/public-needs.json',
+    JSON.stringify(payload, null, 2) + '\n',
+    'Update public needs data'
+  );
+}
+
+function updateGitHubFile_(path, content, message) {
+  const owner = 'nishikama-ra';
+  const repo = 'Mobility_Dest_Enq';
+  const branch = 'main';
+  const token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
+
+  if (!token) {
+    throw new Error('GITHUB_TOKEN is not set.');
+  }
+
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path).replace(/%2F/g, '/')}?ref=${branch}`;
+
+  let sha = null;
+  const getResponse = UrlFetchApp.fetch(apiUrl, {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json'
+    },
+    muteHttpExceptions: true
+  });
+
+  if (getResponse.getResponseCode() === 200) {
+    const current = JSON.parse(getResponse.getContentText());
+    sha = current.sha;
+  } else if (getResponse.getResponseCode() !== 404) {
+    throw new Error('GitHub file read failed: HTTP ' + getResponse.getResponseCode() + ' ' + getResponse.getContentText());
+  }
+
+  const body = {
+    message: message,
+    content: Utilities.base64Encode(content, Utilities.Charset.UTF_8),
+    branch: branch
+  };
+
+  if (sha) {
+    body.sha = sha;
+  }
+
+  const putResponse = UrlFetchApp.fetch(apiUrl, {
+    method: 'put',
+    contentType: 'application/json',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json'
+    },
+    payload: JSON.stringify(body),
+    muteHttpExceptions: true
+  });
+
+  const code = putResponse.getResponseCode();
+  if (code < 200 || code >= 300) {
+    throw new Error('GitHub file update failed: HTTP ' + code + ' ' + putResponse.getContentText());
+  }
+}
