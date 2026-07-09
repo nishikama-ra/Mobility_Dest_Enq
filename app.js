@@ -252,22 +252,27 @@ function renderNeeds(payload) {
 }
 
 function loadPublicNeeds(options = {}) {
-  const retry = options.retry === true;
   const manual = options.manual === true;
+  const url = `data/public-needs.json?_=${Date.now()}`;
 
-  if (!retry) {
-    ideasList.innerHTML = manual
-      ? '<p class="empty-state">公開投稿を更新しています。</p>'
-      : '<p class="empty-state">公開投稿を読み込んでいます。</p>';
+  ideasList.innerHTML = manual
+    ? '<p class="empty-state">公開投稿を更新しています。</p>'
+    : '<p class="empty-state">公開投稿を読み込んでいます。</p>';
 
-    if (manual) {
-      setRefreshButtonLoading(true);
-    }
+  if (manual) {
+    setRefreshButtonLoading(true);
   }
 
-  callApi(
-    { action: "list" },
-    (payload) => {
+  fetch(url, {
+    cache: "no-store"
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((payload) => {
       renderNeeds(payload);
 
       if (manual) {
@@ -275,23 +280,16 @@ function loadPublicNeeds(options = {}) {
       }
 
       setRefreshButtonLoading(false);
-    },
-    (message) => {
-      if (!retry) {
-        ideasList.innerHTML = '<p class="empty-state">通信に時間がかかっています。読み込みを続けています。</p>';
-        window.setTimeout(() => loadPublicNeeds({ retry: true, manual }), 2000);
-        return;
-      }
-
-      ideasList.innerHTML = `<p class="config-warning">${escapeHtml(message)}</p>`;
+    })
+    .catch(() => {
+      ideasList.innerHTML = '<p class="config-warning">公開投稿を読み込めませんでした。時間をおいて、もう一度お試しください。</p>';
 
       if (manual) {
         showToast("公開投稿を更新できませんでした。", "通信エラー", "cancel");
       }
 
       setRefreshButtonLoading(false);
-    }
-  );
+    });
 }
 
 function buildPostFields(item) {
