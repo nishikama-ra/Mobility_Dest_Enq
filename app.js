@@ -215,6 +215,13 @@ function cleanupJsonp(callbackName, script) {
   script.remove();
 }
 
+function setRefreshButtonLoading(isLoading) {
+  if (!refreshButton) return;
+
+  refreshButton.disabled = isLoading;
+  refreshButton.textContent = isLoading ? "更新中" : "更新";
+}
+
 function renderNeeds(payload) {
   const items = Array.isArray(payload) ? payload : payload.items || [];
 
@@ -244,18 +251,45 @@ function renderNeeds(payload) {
   }).join("");
 }
 
-function loadPublicNeeds(retry = false) {
+function loadPublicNeeds(options = {}) {
+  const retry = options.retry === true;
+  const manual = options.manual === true;
+
+  if (!retry) {
+    ideasList.innerHTML = manual
+      ? '<p class="empty-state">公開投稿を更新しています。</p>'
+      : '<p class="empty-state">公開投稿を読み込んでいます。</p>';
+
+    if (manual) {
+      setRefreshButtonLoading(true);
+    }
+  }
+
   callApi(
     { action: "list" },
-    renderNeeds,
+    (payload) => {
+      renderNeeds(payload);
+
+      if (manual) {
+        showToast("公開投稿を更新しました。", "更新しました", "success");
+      }
+
+      setRefreshButtonLoading(false);
+    },
     (message) => {
       if (!retry) {
-        ideasList.innerHTML = '<p class="empty-state">読み込み中です。通信が混み合っているため、もう一度試しています。</p>';
-        window.setTimeout(() => loadPublicNeeds(true), 2000);
+        ideasList.innerHTML = '<p class="empty-state">通信に時間がかかっています。読み込みを続けています。</p>';
+        window.setTimeout(() => loadPublicNeeds({ retry: true, manual }), 2000);
         return;
       }
 
       ideasList.innerHTML = `<p class="config-warning">${escapeHtml(message)}</p>`;
+
+      if (manual) {
+        showToast("公開投稿を更新できませんでした。", "通信エラー", "cancel");
+      }
+
+      setRefreshButtonLoading(false);
     }
   );
 }
@@ -470,6 +504,6 @@ document.addEventListener("keydown", (event) => {
 
 installValidationClear(needsForm);
 installValidationClear(manageLinkForm);
-refreshButton.addEventListener("click", loadPublicNeeds);
+refreshButton.addEventListener("click", () => loadPublicNeeds({ manual: true }));
 loadPublicNeeds();
 loadMyPosts();
