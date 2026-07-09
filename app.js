@@ -189,7 +189,7 @@ function callJsonp(url, onSuccess, onError) {
   const script = document.createElement("script");
   const timeoutId = window.setTimeout(() => {
     cleanupJsonp(callbackName, script);
-    onError?.("通信に失敗しました。ページを再読み込みしてもう一度お試しください。");
+    onError?.("公開投稿の読み込みに時間がかかっています。通信環境を確認して、もう一度お試しください。");
   }, 20000);
 
   window[callbackName] = (payload) => {
@@ -201,7 +201,7 @@ function callJsonp(url, onSuccess, onError) {
   script.onerror = () => {
     window.clearTimeout(timeoutId);
     cleanupJsonp(callbackName, script);
-    onError?.("通信に失敗しました。ページを再読み込みしてもう一度お試しください。");
+    onError?.("公開投稿を読み込めませんでした。通信環境を確認して、もう一度お試しください。");
   };
 
   url.searchParams.set("callback", callbackName);
