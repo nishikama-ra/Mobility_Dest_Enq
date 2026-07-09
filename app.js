@@ -173,6 +173,10 @@ function callApi(params, onSuccess, onError) {
   }
 
   const url = buildApiUrl(params);
+  callJsonp(url, onSuccess, onError);
+}
+
+  const url = buildApiUrl(params);
   if (window.fetch) {
     const controller = window.AbortController ? new AbortController() : null;
     const timeoutId = window.setTimeout(() => controller?.abort(), 15000);
