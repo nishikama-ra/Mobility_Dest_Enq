@@ -253,7 +253,7 @@ function renderNeeds(payload) {
 
 function loadPublicNeeds(options = {}) {
   const manual = options.manual === true;
-  const url = `https://raw.githubusercontent.com/nishikama-ra/Mobility_Dest_Enq/main/data/public-needs.json?_=${Date.now()}`;
+  const url = `https://raw.githubusercontent.com/nishikama-ra/Mobility_Dest_Enq/public-data/data/public-needs.json?_=${Date.now()}`;
 
   ideasList.innerHTML = manual
     ? '<p class="empty-state">公開投稿を更新しています。</p>'
