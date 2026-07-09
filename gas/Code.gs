@@ -80,6 +80,8 @@ function doGet(e) {
   const params = e && e.parameter ? e.parameter : {};
   const action = params.action || 'list';
 
+  console.log('[doGet] start action=' + action + ', callback=' + (params.callback ? 'yes' : 'no'));
+
   try {
     if (action === 'health') {
       return outputJson_(params.callback, { ok: true, name: 'mobility-needs-board' });
@@ -95,6 +97,7 @@ function doGet(e) {
 
     return outputJson_(params.callback, { ok: false, error: 'unknown action' });
   } catch (error) {
+    console.log('[doGet] error action=' + action + ', message=' + error.message);
     return outputJson_(params.callback, { ok: false, error: error.message });
   }
 }
@@ -142,25 +145,41 @@ function requestManageLink_(params) {
 }
 
 function getPublicNeeds_() {
-  const sheet = getPublicSubmissionSheet_();
+  const t0 = Date.now();
+
+  const sheet = getPublicSubmissionSheetForRead_();
+  console.log('[list] get sheet: ' + (Date.now() - t0) + 'ms');
+
+  const t1 = Date.now();
   const values = sheet.getDataRange().getValues();
+  console.log('[list] getValues rows=' + values.length + ': ' + (Date.now() - t1) + 'ms');
+
   if (values.length <= 1) {
+    console.log('[list] total empty: ' + (Date.now() - t0) + 'ms');
     return [];
   }
 
+  const t2 = Date.now();
   const header = values[0];
   const rows = values.slice(1);
   const index = buildHeaderIndex_(header);
 
-  return rows
+  const items = rows
     .filter(function(row) {
-      return row[index['状態']] === '有効' && row[index['公開設定']] === 'public' && row[index['公開状態']] === CONFIG.publicStatus;
+      return row[index['状態']] === '有効' &&
+             row[index['公開設定']] === 'public' &&
+             row[index['公開状態']] === CONFIG.publicStatus;
     })
     .slice(-CONFIG.maxPublicItems)
     .reverse()
     .map(function(row) {
       return toPublicItem_(row, index);
     });
+
+  console.log('[list] filter/map items=' + items.length + ': ' + (Date.now() - t2) + 'ms');
+  console.log('[list] total: ' + (Date.now() - t0) + 'ms');
+
+  return items;
 }
 
 function getMyPosts_(email, token) {
@@ -426,6 +445,21 @@ function getSheet_() {
 
 function getPublicSubmissionSheet_() {
   return prepareSubmissionSheet_(getSpreadsheet_(), CONFIG.publicSheetName);
+}
+
+function getPublicSubmissionSheetForRead_() {
+  const spreadsheetId = PropertiesService.getScriptProperties().getProperty(CONFIG.spreadsheetIdProperty);
+  if (!spreadsheetId) {
+    throw new Error('先に setupMobilityNeedsBoard を実行してください。');
+  }
+
+  const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+  const sheet = spreadsheet.getSheetByName(CONFIG.publicSheetName);
+  if (!sheet) {
+    throw new Error('公開投稿シートが見つかりません。');
+  }
+
+  return sheet;
 }
 
 function getPrivateSubmissionSheet_() {
