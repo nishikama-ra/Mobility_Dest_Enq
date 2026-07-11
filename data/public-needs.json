@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-09T12:26:35.354Z",
+  "generatedAt": "2026-07-11T09:45:07.425Z",
   "items": [
+    {
+      "id": "5070d555-c9f2-48bb-9a16-9f7594b225be",
+      "createdAt": "2026-07-11 17:04:17",
+      "date": "2026-07-11T08:04:17.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉四丁目の上の方",
+      "timeBand": "日中",
+      "personType": "誰でも　若しくは、買い物の民",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "買い物や、諸々の用事を足しに",
+      "fromPlace": "モノレール西鎌倉駅",
+      "toPlace": "西鎌倉四丁目の上の方",
+      "story": "モノレールに乗るにしても  日常の買い物をするにしても  大船駅に向かうバスが無くなった今  家に帰る為の上り坂がキツすぎる  西鎌倉バス停がどれほど有難かったのか  無くなった今は絶望的な気持ちです",
+      "heardFrom": "自身のの経験",
+      "nickname": "とみお"
+    },
     {
       "id": "c96cfde1-bda3-469c-8cf4-333d1ac75629",
       "createdAt": "2026-07-08 22:27:33",
