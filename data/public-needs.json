@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-15T04:14:55.926Z",
+  "generatedAt": "2026-07-15T04:58:17.852Z",
   "items": [
+    {
+      "id": "08a6bbb0-a0b9-423f-abe7-e189b1126ede",
+      "createdAt": "2026-07-15 13:20:52",
+      "date": "2026-07-15T04:20:52.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "新鎌倉山",
+      "timeBand": "平日日中",
+      "personType": "普段車の運転もされる60才代",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "月に2〜3回鎌倉方面に買い物や用事があって行く",
+      "fromPlace": "新鎌倉山",
+      "toPlace": "由比ヶ浜の美容院",
+      "story": "今一番困っている移動手段といえば、何といっても、鎌倉駅までのバスです。  由比ヶ浜の美容院に行くのに、江の島乗り換えで、江ノ電使って行かなくてはならなくて困っています。",
+      "heardFrom": "友人",
+      "nickname": "ケンケン"
+    },
     {
       "id": "d2d3fc25-c051-40e4-a0b0-2261b28a0f48",
       "createdAt": "2026-07-15 13:04:35",
