@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-16T11:58:00.313Z",
+  "generatedAt": "2026-07-16T11:58:09.499Z",
   "items": [
+    {
+      "id": "1c37c47f-4edf-4388-a0f3-dc3311d23f6d",
+      "createdAt": "2026-07-16 18:12:11",
+      "date": "2026-07-16T09:12:11.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉地区全域",
+      "timeBand": "常時",
+      "personType": "免許返納を考えている人",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "買い物、通院、役所",
+      "fromPlace": "自宅",
+      "toPlace": "スーパー、医院、役所",
+      "story": "自動車の運転は、危ないが、低速の一人用の車なら危険性が少なく運転できると思われる方は、利用してはいかがでしょうか？　時々コンビニで配達用に止まっている車です。「超小型モビリティ」と呼ばれている様です。  現在は普通免許が必要ですが専用の免許ができると良いと思います。",
+      "heardFrom": "本人",
+      "nickname": "Tantan"
+    },
     {
       "id": "57a1eb22-a967-4cf9-bd9b-e082daff0ae8",
       "createdAt": "2026-07-16 17:32:11",
