@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-16T11:58:09.499Z",
+  "generatedAt": "2026-07-20T02:08:11.559Z",
   "items": [
+    {
+      "id": "1f2983de-b974-4420-9e4e-4a74ea4c7dbc",
+      "createdAt": "2026-07-20 09:55:13",
+      "date": "2026-07-20T00:55:13.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉全域",
+      "timeBand": "夜、深夜",
+      "personType": "通勤、観光する人",
+      "purposeCategory": "レジャー・お出かけ",
+      "purposeDetail": "西鎌倉エリアへの深夜帰宅",
+      "fromPlace": "大船駅",
+      "toPlace": "西鎌倉駅",
+      "story": "通勤、休日に関わらず、大船駅から湘南モノレール各駅へ深夜帰宅する際、せめてJRの終電までモノレールが動いていて欲しい。もしくは大船駅でのタクシー待ち時間の緩和",
+      "heardFrom": "自身",
+      "nickname": "西鎌倉駅近くの住人"
+    },
     {
       "id": "1c37c47f-4edf-4388-a0f3-dc3311d23f6d",
       "createdAt": "2026-07-16 18:12:11",
