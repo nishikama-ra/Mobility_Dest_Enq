@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-21T13:04:17.864Z",
+  "generatedAt": "2026-07-21T20:51:54.372Z",
   "items": [
+    {
+      "id": "fb4c70ea-97c3-4318-8cb2-b5809dbf15dc",
+      "createdAt": "2026-07-22 01:39:33",
+      "date": "2026-07-21T16:39:33.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉",
+      "timeBand": "日中",
+      "personType": "高齢者",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "例えば市役所に用事があって",
+      "fromPlace": "西鎌倉４丁目の自宅",
+      "toPlace": "鎌倉駅周辺",
+      "story": "鎌倉市民でありながら鎌倉駅周辺へのアクセスがとても悪いため、市役所や学習センターのイベントや講習会、また行ってみたいお店やレストランなどにほとんど行かれません。藤沢駅周辺の方がアクセスが良いです。",
+      "heardFrom": "自身、家族",
+      "nickname": "チョコ"
+    },
     {
       "id": "b505802d-967c-450e-b47c-d88dbb9710de",
       "createdAt": "2026-07-21 21:03:10",
