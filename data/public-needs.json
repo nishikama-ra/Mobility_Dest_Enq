@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-22T10:04:18.327Z",
+  "generatedAt": "2026-07-22T10:04:25.765Z",
   "items": [
+    {
+      "id": "1b9538f5-de0d-495e-bd8b-445542db09dd",
+      "createdAt": "2026-07-22 17:50:10",
+      "date": "2026-07-22T08:50:10.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "津村",
+      "timeBand": "平日朝、夕方",
+      "personType": "通学の人",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "毎日の通学",
+      "fromPlace": "西鎌倉駅",
+      "toPlace": "藤沢駅、鎌倉駅",
+      "story": "西鎌倉駅から藤沢駅、もしくは鎌倉駅に行く場合は、モノレールとJRを乗り継がなければならず、不便であり、時間とお金が掛かる。便数を増やしてもらえると利用者は増えると思われる。便数が少ないと結局不便なため利用しづらい。",
+      "heardFrom": "自身。子供達",
+      "nickname": "にしかまくらっこ"
+    },
     {
       "id": "fb4c70ea-97c3-4318-8cb2-b5809dbf15dc",
       "createdAt": "2026-07-22 01:39:33",
