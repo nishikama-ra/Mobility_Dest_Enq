@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-07-26T01:29:04.388Z",
+  "generatedAt": "2026-07-31T01:32:42.381Z",
   "items": [
+    {
+      "id": "ecec92fd-ce5e-4a56-bd6a-d99ac76de0e0",
+      "createdAt": "2026-07-31 09:37:35",
+      "date": "2026-07-31T00:37:35.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉地区全体",
+      "timeBand": "平日夜",
+      "personType": "都内へ通勤する人",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "帰宅する際",
+      "fromPlace": "藤沢駅または大船駅",
+      "toPlace": "自宅",
+      "story": "終モノ後、バスもなく、タクシーがなかなか来ずに乗り場で30分以上並ぶ。まだ回転の早い藤沢駅まで行くようにしています",
+      "heardFrom": "自身",
+      "nickname": "いちおか"
+    },
     {
       "id": "eaecdd52-c091-4a8f-8836-787826154b45",
       "createdAt": "2026-07-26 09:49:32",
