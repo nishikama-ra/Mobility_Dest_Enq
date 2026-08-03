@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-03T02:32:51.760Z",
+  "generatedAt": "2026-08-03T04:52:49.994Z",
   "items": [
+    {
+      "id": "dd3f214d-06d8-4c3f-8be0-fc54d846b0bb",
+      "createdAt": "2026-08-03 12:17:21",
+      "date": "2026-08-03T03:17:21.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "全ての時間",
+      "personType": "全ての人",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "日々の通勤",
+      "fromPlace": "鎌倉山",
+      "toPlace": "大船駅",
+      "story": "鎌倉山バス停からのバスが減便になり、大船駅への移動が困難になっている。  またモノレールの最寄である湘南深沢駅からの道は整備されてなく徒歩で通行するのは困難だと思う。20代の私でも困難なので、高齢の方はバスを乗るしかないが本数が極端に少ない。",
+      "heardFrom": "自身",
+      "nickname": "M"
+    },
     {
       "id": "fb17a357-bbad-43bd-82fa-9704d2a2b2fc",
       "createdAt": "2026-08-03 08:34:48",
