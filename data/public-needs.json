@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-04T13:21:29.618Z",
+  "generatedAt": "2026-08-04T13:21:44.202Z",
   "items": [
+    {
+      "id": "1b636211-14af-4757-b545-75fa4e117532",
+      "createdAt": "2026-08-04 21:44:35",
+      "date": "2026-08-04T12:44:35.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "日中",
+      "personType": "保護者",
+      "purposeCategory": "習い事・地域活動",
+      "purposeDetail": "習い事、買い物、",
+      "fromPlace": "鎌倉山",
+      "toPlace": "大船駅、鎌倉駅",
+      "story": "運転ができないということもあり、バスの毎年の減便は日頃の生活に困っている。バスが１時間に０〜1本のため、子どもの進学、習い事を考えた時に、引っ越しせざるをえないのではと考えてしまう。",
+      "heardFrom": "自身",
+      "nickname": "たいやき"
+    },
     {
       "id": "dd3f214d-06d8-4c3f-8be0-fc54d846b0bb",
       "createdAt": "2026-08-03 12:17:21",
