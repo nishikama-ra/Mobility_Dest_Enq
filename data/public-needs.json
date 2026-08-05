@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-04T13:21:44.202Z",
+  "generatedAt": "2026-08-05T06:38:21.652Z",
   "items": [
+    {
+      "id": "bee22ad4-da25-4638-a420-bdf3b8219cfe",
+      "createdAt": "2026-08-05 12:37:55",
+      "date": "2026-08-05T03:37:55.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉",
+      "timeBand": "平日、休日の日中",
+      "personType": "子ども、保護者",
+      "purposeCategory": "レジャー・お出かけ",
+      "purposeDetail": "イベント参加など",
+      "fromPlace": "西鎌倉地区",
+      "toPlace": "西鎌みんなの家",
+      "story": "坂道なので幼児は歩けず、駐車場がないので行くのが大変です。利用したいのですがなかなか行かれません。",
+      "heardFrom": "自身",
+      "nickname": "おにぎり"
+    },
     {
       "id": "1b636211-14af-4757-b545-75fa4e117532",
       "createdAt": "2026-08-04 21:44:35",
