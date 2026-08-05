@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-05T06:38:21.652Z",
+  "generatedAt": "2026-08-05T06:38:24.558Z",
   "items": [
+    {
+      "id": "16656390-9561-4d82-b209-b0c6f01cf893",
+      "createdAt": "2026-08-05 12:41:33",
+      "date": "2026-08-05T03:41:33.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉",
+      "timeBand": "深夜を除くすべての時間帯",
+      "personType": "通勤、通学、公的手続きなど",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "通勤や買い物、レジャーなど",
+      "fromPlace": "自宅",
+      "toPlace": "鎌倉駅",
+      "story": "鎌倉市内にも関わらず、鎌倉駅方面に出るのが不便すぎる。車なら20分のところ、電車を乗り継がなくてはならない。",
+      "heardFrom": "自身",
+      "nickname": "おにぎり"
+    },
     {
       "id": "bee22ad4-da25-4638-a420-bdf3b8219cfe",
       "createdAt": "2026-08-05 12:37:55",
