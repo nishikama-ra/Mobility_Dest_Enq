@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-07T07:58:47.229Z",
+  "generatedAt": "2026-08-07T08:01:33.281Z",
   "items": [
+    {
+      "id": "d73891f7-bf5a-43e5-b546-3073e90804f7",
+      "createdAt": "2026-08-07 17:00:35",
+      "date": "2026-08-07T08:00:35.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "平日夕方",
+      "personType": "小学生",
+      "purposeCategory": "習い事・地域活動",
+      "purposeDetail": "駅までの手段",
+      "fromPlace": "鎌倉山",
+      "toPlace": "深沢駅か西鎌倉駅",
+      "story": "バスもないので車で送迎しかない。",
+      "heardFrom": "子供",
+      "nickname": "山っ"
+    },
     {
       "id": "013a8b08-6604-4126-bac4-95544416362a",
       "createdAt": "2026-08-07 16:54:47",
