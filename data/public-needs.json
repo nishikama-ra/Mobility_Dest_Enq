@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-05T06:38:24.558Z",
+  "generatedAt": "2026-08-07T05:27:35.340Z",
   "items": [
+    {
+      "id": "64e9a89c-c738-45a3-a8a7-22a71a18dfff",
+      "createdAt": "2026-08-07 09:23:15",
+      "date": "2026-08-07T00:23:15.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "日中",
+      "personType": "住民全般",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "駅までの送迎",
+      "fromPlace": "鎌倉山２丁目あたり",
+      "toPlace": "西鎌倉駅",
+      "story": "特に平日、鎌倉駅行きのバスも、鎌倉山から大船行きのバスもない時が多く、出かけるのに25分も徒歩で西鎌倉駅に行かなくては行けないのが大変不便で憂鬱です。",
+      "heardFrom": "本人の経験",
+      "nickname": "にこちゃん"
+    },
     {
       "id": "16656390-9561-4d82-b209-b0c6f01cf893",
       "createdAt": "2026-08-05 12:41:33",
