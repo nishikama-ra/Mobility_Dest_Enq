@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-07T05:27:35.340Z",
+  "generatedAt": "2026-08-07T05:27:37.396Z",
   "items": [
+    {
+      "id": "22cfff70-c5ab-47b1-9b73-c1289b87dc44",
+      "createdAt": "2026-08-07 10:51:03",
+      "date": "2026-08-07T01:51:03.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "平日日中",
+      "personType": "通勤",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "駅までの",
+      "fromPlace": "鎌倉山",
+      "toPlace": "鎌倉駅",
+      "story": "9時〜20時の時間帯にバスの本数が少なすぎて、タクシーや徒歩でモノレール駅まで行かないと行けなく。  コストと時間がかかる",
+      "heardFrom": "自分",
+      "nickname": "コバ"
+    },
     {
       "id": "64e9a89c-c738-45a3-a8a7-22a71a18dfff",
       "createdAt": "2026-08-07 09:23:15",
