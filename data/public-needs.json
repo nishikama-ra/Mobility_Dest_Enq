@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-07T08:01:33.281Z",
+  "generatedAt": "2026-08-07T10:14:22.710Z",
   "items": [
+    {
+      "id": "9e06be18-9162-47f9-9a87-1d5ecea379fb",
+      "createdAt": "2026-08-07 17:10:13",
+      "date": "2026-08-07T08:10:13.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "休日",
+      "personType": "大人",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "お出かけ",
+      "fromPlace": "自宅",
+      "toPlace": "最寄り駅まで",
+      "story": "バスの本数が少なすぎて乗り継ぎもうまくできず、公共交通機関で出かけづらい。  車で出かけるとお酒を飲む事ができない。",
+      "heardFrom": "自分",
+      "nickname": "山"
+    },
     {
       "id": "d73891f7-bf5a-43e5-b546-3073e90804f7",
       "createdAt": "2026-08-07 17:00:35",
