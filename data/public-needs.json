@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-17T08:25:31.610Z",
+  "generatedAt": "2026-08-25T06:04:50.950Z",
   "items": [
+    {
+      "id": "2660bfe5-85f2-491e-949b-f7a072895eda",
+      "createdAt": "2026-08-25 14:49:13",
+      "date": "2026-08-25T05:49:13.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "西鎌倉地区",
+      "timeBand": "平日夕方",
+      "personType": "通勤(退勤)者",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "帰宅",
+      "fromPlace": "西鎌倉駅",
+      "toPlace": "自宅(2丁目の上の方)",
+      "story": "駅からの帰宅路約800mはすべて上り道で体力的に非常にきつい。",
+      "heardFrom": "自身",
+      "nickname": "ハッセルベック"
+    },
     {
       "id": "6424f8ca-a10b-40ed-98a1-7f5d7c2199f5",
       "createdAt": "2026-08-17 15:39:06",
