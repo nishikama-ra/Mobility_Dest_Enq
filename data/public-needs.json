@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-27T03:01:24.907Z",
+  "generatedAt": "2026-09-02T03:02:07.863Z",
   "items": [
+    {
+      "id": "b3a2a001-85a4-43a5-ad00-818c188ad5ab",
+      "createdAt": "2026-09-02 10:39:27",
+      "date": "2026-09-02T01:39:27.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "平日日中、通勤",
+      "personType": "通勤",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "駅まで通勤、買い物",
+      "fromPlace": "鎌倉山自宅",
+      "toPlace": "jr鎌倉駅",
+      "story": "2026.12京急バス廃止になるので、全ての住民にとって、生活が大幅に不便になり、非常に困る。  従って大至急、江ノ電バスさんに運行実施を決断して頂きたい。",
+      "heardFrom": "自身",
+      "nickname": "バーディー"
+    },
     {
       "id": "caddd1e4-ef3f-4418-af9a-87049e40fabd",
       "createdAt": "2026-08-27 10:59:45",
