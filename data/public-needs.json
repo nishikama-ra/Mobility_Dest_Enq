@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-09-14T13:54:32.168Z",
+  "generatedAt": "2026-10-07T08:46:12.119Z",
   "items": [
+    {
+      "id": "821afd8b-3b29-4aa9-aa46-2e9da0fd9c4e",
+      "createdAt": "2026-10-07 17:43:33",
+      "date": "2026-10-07T08:43:33.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "日中",
+      "personType": "大人",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "横浜や東京方面へ行くための移動",
+      "fromPlace": "鎌倉山",
+      "toPlace": "鎌倉駅、又は大船駅駅へ",
+      "story": "今も時間帯によっては待ち時間が長くて不便なのに、バスが無くなると移動手段が無くなってしまって困る。",
+      "heardFrom": "自分",
+      "nickname": "山"
+    },
     {
       "id": "050c7a36-a341-4913-8da5-7abe9ec57ad9",
       "createdAt": "2026-09-14 22:05:12",
