@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-10-07T08:46:12.119Z",
+  "generatedAt": "2026-10-07T09:01:14.272Z",
   "items": [
+    {
+      "id": "523b1c3f-69cb-4730-a086-160993e38b44",
+      "createdAt": "2026-10-07 17:58:13",
+      "date": "2026-10-07T08:58:13.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "全日",
+      "personType": "住人が",
+      "purposeCategory": "お買い物・用事",
+      "purposeDetail": "仕事、習い事など、",
+      "fromPlace": "鎌倉山から",
+      "toPlace": "藤沢駅へ",
+      "story": "バスで乗り継ぎも上手くいかずモノレールの駅まで徒歩で行くしかなく困っている。",
+      "heardFrom": "自分、家族",
+      "nickname": "川"
+    },
     {
       "id": "821afd8b-3b29-4aa9-aa46-2e9da0fd9c4e",
       "createdAt": "2026-10-07 17:43:33",
