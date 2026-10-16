@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-10-07T09:01:14.272Z",
+  "generatedAt": "2026-10-16T06:56:45.617Z",
   "items": [
+    {
+      "id": "a62cf50b-bf2e-4f9f-a9fd-e26b379833d8",
+      "createdAt": "2026-10-16 13:53:59",
+      "date": "2026-10-16T04:53:59.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "鎌倉山",
+      "timeBand": "平日朝、夕方",
+      "personType": "50代",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "毎日の通勤",
+      "fromPlace": "鎌倉山〜鎌倉駅",
+      "toPlace": "職場",
+      "story": "バスが無くなると鎌倉山から鎌倉駅までの交通機関がなくなり困る。",
+      "heardFrom": "自分",
+      "nickname": "かずこ"
+    },
     {
       "id": "523b1c3f-69cb-4730-a086-160993e38b44",
       "createdAt": "2026-10-07 17:58:13",
