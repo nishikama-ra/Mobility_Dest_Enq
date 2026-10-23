@@ -1,7 +1,25 @@
 {
   "ok": true,
-  "generatedAt": "2026-10-16T06:56:45.617Z",
+  "generatedAt": "2026-10-23T14:57:14.535Z",
   "items": [
+    {
+      "id": "f346fde0-b5a9-4cd0-8a6b-6d8039a92c49",
+      "createdAt": "2026-10-23 23:41:31",
+      "date": "2026-10-23T14:41:31.000Z",
+      "status": "有効",
+      "visibility": "public",
+      "publicStatus": "公開",
+      "area": "南鎌倉",
+      "timeBand": "朝夕",
+      "personType": "通勤通学",
+      "purposeCategory": "通勤・通学",
+      "purposeDetail": "習い事",
+      "fromPlace": "西鎌倉駅 又は 近傍",
+      "toPlace": "大船駅 又は 藤沢駅",
+      "story": "従来のバス路線が廃線や減便され必要なタイミングには程遠い状況",
+      "heardFrom": "自分",
+      "nickname": "j@man"
+    },
     {
       "id": "a62cf50b-bf2e-4f9f-a9fd-e26b379833d8",
       "createdAt": "2026-10-16 13:53:59",
